@@ -102,7 +102,7 @@
 
 + cube MX初始化
 + Keil-MDK编程
-+ 标准外设库
++ 标准外设库&Hal库
 + 使用**github**或**gitee** +Git 进行版本控制
 
 ​	关于**github** 相关网络资源：https://zhuanlan.zhihu.com/p/369486197
