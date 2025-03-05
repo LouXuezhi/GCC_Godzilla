@@ -22,3 +22,7 @@
 
 https://blog.csdn.net/nuannuanwfm/article/details/104119932
 
+## 多人协作模式
++ 本地创建文件夹，初始化仓库
++ 将线上仓库Pull到本地
++ 本地用自己所属的branch
