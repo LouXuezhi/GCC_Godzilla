@@ -37,6 +37,7 @@ https://blog.csdn.net/nuannuanwfm/article/details/104119932
 + `git pull`拉取仓库文件，这时应该会有提示`Please specify which branch you want to merge with.`
 + `git pull origin master` 应该就行了
 + 如果出现`refusing to merge unrelated histories`报错，使用`git pull origin master --allow-unrelated-histories`再用`git push origin master:master`\\\这步相当与将线上线下的分支链接
++ 如果出现分支未选择的报错 则用它推荐的`git push --set-upstream origin master`即可
 + 配置好后别忘了 `git checkout <自己的分支>`转换工作区
 + 之后就可以用 add commit push 三步走来上传文档了
 + 也可以用`git pull`下载所在仓库分支的所有文档
