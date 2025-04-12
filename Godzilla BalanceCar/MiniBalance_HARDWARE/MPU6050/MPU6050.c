@@ -8,7 +8,7 @@
 #define GYRO_ON         (0x02)
 #define MOTION          (0)
 #define NO_MOTION       (1)
-#define DEFAULT_MPU_HZ  (200)
+#define DEFAULT_MPU_HZ  (200)//5ms一次
 #define FLASH_SIZE      (512)
 #define FLASH_MEM_START ((void*)0x1800)
 #define q30  1073741824.0f
@@ -238,7 +238,7 @@ Output  : 1：Connected；0：Not connected
 返回  值：1：已连接；0：未连接
 **************************************************************************/
 uint8_t MPU6050_testConnection(void) {
-   if(MPU6050_getDeviceID() == 0x68)  //0b01101000;
+   if(MPU6050_getDeviceID() == 0x68)  //0b01101000;悬空或接地：0x68||接VCC： 0x69
    return 1;
    	else return 0;
 }
@@ -297,33 +297,44 @@ void DMP_Init(void)
    u8 temp[1]={0};
 	 Flag_Show=1;
    i2cRead(0x68,0x75,1,temp);
-	 printf("mpu_set_sensor complete ......\r\n");
+	 //printf("mpu_set_sensor complete ......\r\n");
 	if(temp[0]!=0x68)NVIC_SystemReset();
+   
 	if(!mpu_init())
   {
 	  if(!mpu_set_sensors(INV_XYZ_GYRO | INV_XYZ_ACCEL))
-	  	 printf("mpu_set_sensor complete ......\r\n");
+	  ;
+	  //printf("mpu_set_sensor complete ......\r\n");
 	  if(!mpu_configure_fifo(INV_XYZ_GYRO | INV_XYZ_ACCEL))
-	  	 printf("mpu_configure_fifo complete ......\r\n");
+	  	 //printf("mpu_configure_fifo complete ......\r\n");
+	  ;
 	  if(!mpu_set_sample_rate(DEFAULT_MPU_HZ))
-	  	 printf("mpu_set_sample_rate complete ......\r\n");
+	  	 //printf("mpu_set_sample_rate complete ......\r\n");
+	  ;
 	  if(!dmp_load_motion_driver_firmware())
-	  	printf("dmp_load_motion_driver_firmware complete ......\r\n");
+	  	//printf("dmp_load_motion_driver_firmware complete ......\r\n");
+	  ;
 	  if(!dmp_set_orientation(inv_orientation_matrix_to_scalar(gyro_orientation)))
-	  	 printf("dmp_set_orientation complete ......\r\n");
+	  	 //printf("dmp_set_orientation complete ......\r\n");
+	  ;
 	  if(!dmp_enable_feature(DMP_FEATURE_6X_LP_QUAT | DMP_FEATURE_TAP |
 	      DMP_FEATURE_ANDROID_ORIENT | DMP_FEATURE_SEND_RAW_ACCEL | DMP_FEATURE_SEND_CAL_GYRO |
 	      DMP_FEATURE_GYRO_CAL))
-	  	 printf("dmp_enable_feature complete ......\r\n");
+	  	 //printf("dmp_enable_feature complete ......\r\n");
+	  ;
 	  if(!dmp_set_fifo_rate(DEFAULT_MPU_HZ))
-	  	 printf("dmp_set_fifo_rate complete ......\r\n");
+	  	 //printf("dmp_set_fifo_rate complete ......\r\n");
+	  ;
 	  run_self_test2();
 		if(!mpu_set_dmp_state(1))
-			 printf("mpu_set_dmp_state complete ......\r\n");
+			 //printf("mpu_set_dmp_state complete ......\r\n
+		;
   }
 	Flag_Show=0;
 
 }
+
+
 /**************************************************************************
 Function: Read the attitude information of DMP in mpu6050
 Input   : none

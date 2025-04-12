@@ -17,7 +17,7 @@ Update£º2021-04-29
 
 All rights reserved
 ***********************************************/
-#include "timer.h"
+//#include "timer.h"
 /**************************************************************************
 Function: Timer 3 channel 3 input capture initialization
 Input   : arr£ºAuto reload value£» psc£º Clock prescaled frequency

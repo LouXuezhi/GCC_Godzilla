@@ -22,6 +22,7 @@ All rights reserved
 #include "sys.h"	  	
 extern u8 Usart3_Receive;
 void uart3_init(u32 bound);
-void USART3_IRQHandler(void);
+void USART1_IRQHandler(void);
+void Usart_SendByte( USART_TypeDef * pUSARTx, uint8_t ch);
 #endif
 

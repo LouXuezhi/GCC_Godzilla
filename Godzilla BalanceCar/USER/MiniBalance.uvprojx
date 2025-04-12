@@ -381,14 +381,14 @@
           <GroupName>USER</GroupName>
           <Files>
             <File>
-              <FileName>stm32f10x_it.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\stm32f10x_it.c</FilePath>
-            </File>
-            <File>
               <FileName>MiniBalance.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\MiniBalance.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f10x_it.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\stm32f10x_it.c</FilePath>
             </File>
             <File>
               <FileName>system_stm32f10x.c</FileName>
@@ -536,14 +536,14 @@
           <GroupName>SYSTEM</GroupName>
           <Files>
             <File>
-              <FileName>delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SYSTEM\delay\delay.c</FilePath>
-            </File>
-            <File>
               <FileName>sys.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SYSTEM\sys\sys.c</FilePath>
+            </File>
+            <File>
+              <FileName>delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SYSTEM\delay\delay.c</FilePath>
             </File>
             <File>
               <FileName>usart.c</FileName>
@@ -556,24 +556,24 @@
           <GroupName>HAREWARE</GroupName>
           <Files>
             <File>
-              <FileName>motor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\MiniBalance_HARDWARE\MOTOR\motor.c</FilePath>
-            </File>
-            <File>
               <FileName>LED.C</FileName>
               <FileType>1</FileType>
               <FilePath>..\MiniBalance_HARDWARE\LED\LED.C</FilePath>
             </File>
             <File>
-              <FileName>key.c</FileName>
+              <FileName>motor.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\MiniBalance_HARDWARE\KEY\key.c</FilePath>
+              <FilePath>..\MiniBalance_HARDWARE\MOTOR\motor.c</FilePath>
             </File>
             <File>
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\MiniBalance_HARDWARE\TIMER\timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\MiniBalance_HARDWARE\KEY\key.c</FilePath>
             </File>
             <File>
               <FileName>encoder.c</FileName>
@@ -591,14 +591,14 @@
               <FilePath>..\MiniBalance_HARDWARE\IIC\IOI2C.c</FilePath>
             </File>
             <File>
-              <FileName>usart3.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\MiniBalance_HARDWARE\USART3\usart3.c</FilePath>
-            </File>
-            <File>
               <FileName>exti.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\MiniBalance_HARDWARE\EXTI\exti.c</FilePath>
+            </File>
+            <File>
+              <FileName>usart3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\MiniBalance_HARDWARE\USART3\usart3.c</FilePath>
             </File>
             <File>
               <FileName>JOLED.c</FileName>
@@ -636,6 +636,11 @@
               <FilePath>..\MiniBalance\CONTROL\control.c</FilePath>
             </File>
             <File>
+              <FileName>MPU6050.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\MiniBalance_HARDWARE\MPU6050\MPU6050.c</FilePath>
+            </File>
+            <File>
               <FileName>show.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\MiniBalance\show\show.c</FilePath>
@@ -664,11 +669,6 @@
               <FileName>KF.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\MiniBalance\KF\KF.c</FilePath>
-            </File>
-            <File>
-              <FileName>MPU6050.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\MiniBalance_HARDWARE\MPU6050\MPU6050.c</FilePath>
             </File>
           </Files>
         </Group>

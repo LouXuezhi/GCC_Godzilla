@@ -17,11 +17,20 @@ Update：2021-04-29
 
 All rights reserved
 ***********************************************/
+#include "Joled.h"
+#include "joled_font.h"
+#include "stm32f10x.h" 
 #include "show.h"
+#include "usart3.h"
+// Device header
 //float Velocity_Left,Velocity_Right;	//车轮速度(mm/s)
 extern uint8_t Flag_Mode;
-extern int Encoder_Left,Encoder_Right;
+extern int16_t Encoder_Left,Encoder_Right;
 extern float Angle_Balance,Gyro_Balance,Gyro_Turn;
+extern int Motor_Left,Motor_Right;
+extern float Velocity_Left,Velocity_Right;
+extern float Distance;
+extern u8 Usart3_Receive;
 /**************************************************************************
 Function: OLED display
 Input   : none
@@ -32,11 +41,12 @@ Output  : none
 **************************************************************************/
 void OLED_InitShow(void)
 {
-	OLED_ShowString(1,1,"Godzilla BalanceCar");
-	OLED_ShowString(2,1,"Press Button0 to Turn On");
-	OLED_ShowString(3,1,"Press Button1 : Mode1");
-	OLED_ShowString(4,1,"Press Button2 : Mode2");
-	OLED_ShowString(5,1,"Press Button3 : Mode3");
+	//Usart_SendByte( USART3, 4);
+	OLED_ShowString(1,1,"Gzila BalCar");
+	OLED_ShowSignedNum(2,1,Encoder_Left,5);
+	OLED_ShowSignedNum(2,7,Encoder_Right,5);
+	OLED_ShowSignedNum(3,1,(int)(Angle_Balance*100-60),5);
+		OLED_ShowSignedNum(4,1,(int)(Gyro_Turn*100+2700),8);
 	
 		/*
 	//=============第一行显示小车模式=======================//	
@@ -106,14 +116,22 @@ void OLED_InitShow(void)
 
 void OLED_ProcessShow(void)
 {
+	//OLED_Clear();
 	OLED_ShowString(1,1,"Mode:");
 	OLED_ShowNum(1,6,Flag_Mode,1);
 	OLED_ShowSignedNum(2,1,Encoder_Left,5);
-	OLED_ShowSignedNum(2,7,Encoder_Right,5);
+	OLED_ShowSignedNum(2,7,Usart3_Receive,5);
 	OLED_ShowSignedNum(3,1,(int)(Angle_Balance*100),5);
-	OLED_ShowSignedNum(4,1,(int)(Gyro_Balance*100),5);
-	OLED_ShowSignedNum(5,1,(int)(Gyro_Turn*100),5);
+	OLED_ShowSignedNum(3,7,(int)(Gyro_Balance*100),5);
+	OLED_ShowSignedNum(4,1,(int)(Distance*1000),8);
 	
+}
+
+//Distance;Gyro_Turn
+void OLED_SleepShow(void)
+{
+	OLED_ShowString(1,1,"Sleep Now");
+	OLED_ShowString(2,1,"PBut0tON");
 }
 
 /**************************************************************************
