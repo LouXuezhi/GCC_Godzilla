@@ -34,6 +34,8 @@ void MiniBalance_Motor_Init(void)
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;      //推挽输出
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;     //50M
   GPIO_Init(GPIOB, &GPIO_InitStructure);					      //根据设定参数初始化GPIOB 
+	//GPIO_SetBits(GPIOB,GPIO_Pin_12|GPIO_Pin_14);
+	//GPIO_ResetBits(GPIOB,GPIO_Pin_13|GPIO_Pin_15);
 }
 /**************************************************************************
 Function: Initialize PWM to drive motor

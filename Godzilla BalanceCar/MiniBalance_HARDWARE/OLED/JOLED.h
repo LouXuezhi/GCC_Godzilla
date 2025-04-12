@@ -1,6 +1,6 @@
 #ifndef __JOLED_H
 #define __JOLED_H
-
+#include "sys.h"
 void OLED_Init(void);
 void OLED_Clear(void);
 void OLED_ShowChar(uint8_t Line, uint8_t Column, char Char);

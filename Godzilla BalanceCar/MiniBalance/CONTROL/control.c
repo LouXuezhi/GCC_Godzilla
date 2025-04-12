@@ -20,17 +20,39 @@ All rights reserved
 #include "control.h"
 #include "pid.h"
 #include "sys.h"
+#define ST_TARGET_SPEED 2
+#define ST_DISTANCE_ACCU 0.001
+
 extern uint8_t Flag_Sleep;
 extern uint8_t Flag_Stop;
 extern uint8_t Flag_Mode;
-extern uint8_t Target_Speed;
-extern uint8_t Target_Turn;
-extern uint8_t Turn_Right;
-extern uint8_t Turn_Left;
+extern float Target_Speed;
+extern uint16_t Target_Turn;
+extern uint16_t Turn_Right;
+extern uint16_t Turn_Left;
 extern float Distance;
+extern int16_t Encoder_Left,Encoder_Right; 
+extern float Velocity_Left,Velocity_Right;
+extern int Motor_Left,Motor_Right;
+extern float pitch,row,yaw;
+extern int count;
 
-extern int Encoder_Left,Encoder_Right;
-//extern float pitch,row,yaw;
+extern float Balance_Kp;
+extern float Balance_Kd;
+
+extern float Speed_Kp;
+extern float Speed_Ki;
+
+
+extern float Turn_Kp;
+extern float Turn_Kd;
+
+extern float Scaler;
+extern float Bias;
+extern int Speed_Bias;
+extern float Turn_Bias;
+extern float Turn_Bias_Small;
+extern int BlueTooth_Mode;
 //extern float gyrox,gyroy,gyroz;
 //extern float accx,accy,accz;
 
@@ -50,66 +72,297 @@ void EXTI15_10_IRQHandler(void)
 {    
 //	static int Voltage_Temp,Voltage_Count,Voltage_All;		//电压测量相关变量
 //	static u8 Flag_Target;	//控制函数相关变量，提供10ms基准
-	int Encoder_Left,Encoder_Right;             					//左右编码器的脉冲计数
+	            					//左右编码器的脉冲计数
 	int Balance_Pwm,Velocity_Pwm,Turn_Pwm;//平衡环PWM变量，速度环PWM变量，转向环PWM变
 	
 	if(EXTI_GetITStatus(EXTI_Line12) == SET)
 	{
-		while (Flag_Sleep==1)
-		{
-			return;
-		}
 		
-		
+		//Led_ShineForEvery2S();
 		//--------------------------------------
 		//以下是走直线的函数
-		if(Flag_Sleep==0&&Flag_Mode==1&&Distance<=200)//模式1 并且累计距离小于2米
+		if(Flag_Sleep==0&&Flag_Mode==1&&Distance<=2.41)//模式1 并且累计距离小于2米
 		{
 			Target_Speed=10;
 			Target_Turn=0;
-			Distance+=0.1;
+			
+			Balance_Kp=980*0.6;
+			Balance_Kd=4*0.58;
+
+			Speed_Kp=-203;
+			Speed_Ki=-203/200;
+
+			Turn_Kp=0;
+			Turn_Kd=0;
+			
+			Turn_Bias=40;//右转则为负
+			Speed_Bias=0;
+			
+			Scaler=1;
+			//Bias=4.6;
+			Distance+=ST_DISTANCE_ACCU;
 		}else{
-			if(Flag_Sleep==0&&Flag_Mode==1&&Distance>200)//模式1 并且累计距离大于于2米
+			if(Flag_Sleep==0&&Flag_Mode==1&&Distance>2.41&&Distance<=6.6)//模式1 并且累计距离大于于2米
 			{
-				Target_Speed=0;
-				Target_Turn=0;
+				if(Distance>=6.5)
+				{
+				
+					Distance=6.55;
+					//Bias=5.5508;
+				}else{
+					Target_Speed=0;
+					//Bias+=0.010;
+					//Speed_Bias-=0.5;
+					//Distance+=ST_DISTANCE_ACCU;
+			}
 			}else
 			{
 				if (Flag_Sleep==0&&Flag_Mode==2)//模式2 
 				{
-					Target_Speed=10;
-					Target_Turn=5;			
+					
+					if(Distance<=0.5)
+					{
+						Speed_Bias=0;
+					Balance_Kp=980*0.6;//320
+					Balance_Kd=4*0.5;//2.5*0.6;
+
+					Speed_Kp=-203;//245;
+					Speed_Ki=-203/200;//245./200;
+
+					Turn_Kp=0;//1;
+					Turn_Kd=0;//-60;//-70
+					Turn_Bias=0;//右转则为负
+					Target_Speed=0;
+					//Turn_Bias=3*Target_Speed;
+					Bias=0;
+					//Turn_Bias=8;
+					//Turn_Bias_Small=20;
+					Target_Turn=0;
+					Scaler=1;
+						Distance+=ST_DISTANCE_ACCU;
+					}else{
+						if(Distance<=4)
+						{
+							Target_Speed=25;
+						//Target_Turn=1000;
+			
+							Balance_Kp=980*0.6;
+							Balance_Kd=4*0.58;
+
+							Speed_Kp=-203;
+							Speed_Ki=-203/200;
+
+							Turn_Kp=0;
+							Turn_Kd=0;
+			
+							Turn_Bias=0;//右转则为负
+							Speed_Bias=0;
+							Turn_Bias_Small=-350;
+							Scaler=1;
+							Distance+=ST_DISTANCE_ACCU;
+						}else
+						{
+													Speed_Bias=0;
+							Balance_Kp=980*0.6;//320
+							Balance_Kd=4*0.5;//2.5*0.6;
+
+							Speed_Kp=-203;//245;
+							Speed_Ki=-203/200;//245./200;
+
+							Turn_Kp=0;//1;
+							Turn_Kd=0;//-60;//-70
+							Turn_Bias=0;//右转则为负
+							Target_Speed=0;
+							//Turn_Bias=3*Target_Speed;
+							Bias=0;
+							//Turn_Bias=8;
+							//Turn_Bias_Small=20;
+							Target_Turn=0;
+							Scaler=1;
+							Distance=4.1;
+						}
+					}
 				}
 				else
 				{
-				Target_Speed=0;
-				Target_Turn=0;
+					
+					Speed_Bias=0;
+					Balance_Kp=980*0.6;//320
+					Balance_Kd=4*0.5;//2.5*0.6;
+
+					Speed_Kp=-203;//245;
+					Speed_Ki=-203/200;//245./200;
+
+					Turn_Kp=0;//1;
+					Turn_Kd=0;//-60;//-70
+					Turn_Bias=0;//右转则为负
+					Target_Speed=0;
+					//Turn_Bias=3*Target_Speed;
+					Bias=0;
+					//Turn_Bias=8;
+					//Turn_Bias_Small=20;
+					Target_Turn=0;
+					Scaler=1;
+					
 				}
 			}
 			
 			}
+		
+			
+			if(BlueTooth_Mode==11)
+			{
+				Target_Speed=10;
+			Target_Turn=0;
+			
+			Balance_Kp=980*0.6;
+			Balance_Kd=4*0.58;
+
+			Speed_Kp=-203;
+			Speed_Ki=-203/200;
+
+			Turn_Kp=0;
+			Turn_Kd=0;
+			
+			Turn_Bias=40;//右转则为负
+			Speed_Bias=0;
+			
+			Scaler=1;
+			}
+			else if(BlueTooth_Mode==12)
+			{
+								Target_Speed=10;
+			Target_Turn=0;
+			
+			Balance_Kp=980*0.6;
+			Balance_Kd=4*0.58;
+
+			Speed_Kp=-203;
+			Speed_Ki=-203/200;
+
+			Turn_Kp=0;
+			Turn_Kd=0;
+			
+			Turn_Bias=40;//右转则为负
+			Speed_Bias=0;
+			
+			Scaler=1;
+				
+			}
+			else if(BlueTooth_Mode==13)
+			{
+					Target_Speed=10;
+			Target_Turn=0;
+			
+			Balance_Kp=980*0.6;
+			Balance_Kd=4*0.58;
+
+			Speed_Kp=-203;
+			Speed_Ki=-203/200;
+
+			Turn_Kp=0;
+			Turn_Kd=0;
+			
+			Turn_Bias=40;//右转则为负
+			Speed_Bias=0;
+			
+			Scaler=1;
+				
+			}
+			
+		else if(BlueTooth_Mode==21)
+		{
+										Target_Speed=25;
+						//Target_Turn=1000;
+			
+							Balance_Kp=980*0.6;
+							Balance_Kd=4*0.58;
+
+							Speed_Kp=-203;
+							Speed_Ki=-203/200;
+
+							Turn_Kp=0;
+							Turn_Kd=0;
+			
+							Turn_Bias=0;//右转则为负
+							Speed_Bias=0;
+							Turn_Bias_Small=-350;
+							Scaler=1;
+		}
+		else if(BlueTooth_Mode==22)
+		{
+										Target_Speed=25;
+						//Target_Turn=1000;
+			
+							Balance_Kp=980*0.6;
+							Balance_Kd=4*0.58;
+
+							Speed_Kp=-203;
+							Speed_Ki=-203/200;
+
+							Turn_Kp=0;
+							Turn_Kd=0;
+			
+							Turn_Bias=0;//右转则为负
+							Speed_Bias=0;
+							Turn_Bias_Small=-350;
+							Scaler=1;
+		}
+		else if (BlueTooth_Mode==23)
+		{
+										Target_Speed=25;
+						//Target_Turn=1000;
+			
+							Balance_Kp=980*0.6;
+							Balance_Kd=4*0.58;
+
+							Speed_Kp=-203;
+							Speed_Ki=-203/200;
+
+							Turn_Kp=0;
+							Turn_Kd=0;
+			
+							Turn_Bias=0;//右转则为负
+							Speed_Bias=0;
+							Turn_Bias_Small=-350;
+							Scaler=1;
+		}
 		//Flag_Target=!Flag_Target;
 		Get_Angle(Way_Angle);                     					//更新姿态，5ms一次，更高的采样频率可以改善卡尔曼滤波和互补滤波的效果
 																	//入口参数：way：获取角度的算法 1：DMP  2：卡尔曼 3：互补滤波
-		Encoder_Left=-Read_Encoder(2);            					//读取左轮编码器的值，前进为正，后退为负
+		Encoder_Left=Read_Encoder(2);            					//读取左轮编码器的值，前进为正，后退为负
 		Encoder_Right=-Read_Encoder(4); 		//读取右轮编码器的值，前进为正，后退为负
 		
-			
+		//Get_Velocity_Form_Encoder(Encoder_Left,Encoder_Right);	
 			
 
+		
+			
 		Velocity_Pwm=Speed(Target_Speed,Encoder_Left,Encoder_Right);  //速度环PID控制	记住，速度反馈是正反馈，就是小车快的时候要慢下来就需要再跑快一点
-		Balance_Pwm=Balance(Goal_Balance_Angle+Velocity_Pwm,Angle_Balance,Gyro_Balance);    //平衡PID控制 Gyro_Balance平衡角速度极性：前倾为正，后倾为负
+		Balance_Pwm=Balance(Goal_Balance_Angle,Angle_Balance,Gyro_Balance);    //平衡PID控制 Gyro_Balance平衡角速度极性：前倾为正，后倾为负
 		Turn_Pwm=Turn(Gyro_Turn,Target_Turn);														//转向环PID控制     
 		
-		Motor_Left=Balance_Pwm+Turn_Pwm;       //计算左轮电机最终PWM
-		Motor_Right=Balance_Pwm-Turn_Pwm;      //计算右轮电机最终PWM
-																												//PWM值正数使小车前进，负数使小车后退
+		Motor_Left=-(Balance_Pwm+Turn_Pwm+Velocity_Pwm+Speed_Bias+Turn_Bias);       //计算左轮电机最终PWM
+		Motor_Right=-(Balance_Pwm-Turn_Pwm+Velocity_Pwm+Speed_Bias-Turn_Bias-Turn_Bias_Small);      //计算右轮电机最终PWM
+				//PWM值正数使小车前进，负数使小车后退
 		Motor_Left=PWM_Limit(Motor_Left,6900,-6900);
 		Motor_Right=PWM_Limit(Motor_Right,6900,-6900);			//PWM限幅
 		
-		Set_Pwm(Motor_Left,Motor_Right);
+		if(Flag_Sleep==1)
+		{
+			Set_Pwm(0,0);
+		}else{
+			Set_Pwm(Motor_Left,-Motor_Right);
+		}
 		
+		//Set_Pwm(3000,-3000);
+		/*
 		if (Put_Down(Angle_Balance,Encoder_Left,Encoder_Right)==1)
+		{
+			Flag_Sleep=1;
+		}
+		*/
+		if (Angle_Balance>40||Angle_Balance<-40)
 		{
 			Flag_Sleep=1;
 		}
@@ -299,7 +552,7 @@ Output  : none
 入口参数：无
 返回  值：无
 **************************************************************************/
-void Key(void)
+/*void Key(void)
 {	
 	u8 tmp,tmp2;
 	tmp=click_N_Double(50); 
@@ -311,6 +564,7 @@ void Key(void)
   if(tmp2==1) Flag_Show=!Flag_Show;	//长按控制进入上位机模式，小车的显示停止
 
 }
+*/
 /**************************************************************************
 Function: If abnormal, turn off the motor
 Input   : angle：Car inclination；voltage：Voltage
@@ -455,7 +709,7 @@ Output  : 1：put down  0：No action
 入口参数：平衡角度；左编码器读数；右编码器读数
 返回  值：1：小车放下   0：小车未放下
 **************************************************************************/
-
+/*
 int Put_Down(float Angle,int encoder_left,int encoder_right)
 { 		   
 	 static u16 flag,count;	 
@@ -481,6 +735,7 @@ int Put_Down(float Angle,int encoder_left,int encoder_right)
 	 }
 	return 0;
 }
+*/
 /**************************************************************************
 Function: Encoder reading is converted to speed (mm/s)
 Input   : none
@@ -489,15 +744,15 @@ Output  : none
 入口参数：无
 返回  值：无
 **************************************************************************/
-/*
+
 void Get_Velocity_Form_Encoder(int encoder_left,int encoder_right)
 { 	
 	float Rotation_Speed_L,Rotation_Speed_R;						//电机转速  转速=编码器读数（5ms每次）*读取频率/倍频数/减速比/编码器精度
-	Rotation_Speed_L = encoder_left*Control_Frequency/EncoderMultiples/Reduction_Ratio/Encoder_precision;
-	Velocity_Left = Rotation_Speed_L*PI*Diameter_67;		//求出编码器速度=转速*周长
-	Rotation_Speed_R = encoder_right*Control_Frequency/EncoderMultiples/Reduction_Ratio/Encoder_precision;
-	Velocity_Right = Rotation_Speed_R*PI*Diameter_67;		//求出编码器速度=转速*周长
-}*/
+	Rotation_Speed_L = encoder_left*200/4/30/13;
+	Velocity_Left = Rotation_Speed_L*3*67;		//求出编码器速度=转速*周长
+	Rotation_Speed_R = encoder_right*200/4/30/13;
+	Velocity_Right = Rotation_Speed_R*3*67;		//求出编码器速度=转速*周长
+}
 /**************************************************************************
 Function: Select car running mode
 Input   : encoder_left：Left wheel encoder reading；encoder_right：Right wheel encoder reading

@@ -17,6 +17,7 @@ Update：2021-04-29
 
 All rights reserved
 ***********************************************/
+
 #include "sys.h"
 #include "usart.h"	  
 #if SYSTEM_SUPPORT_OS
@@ -62,6 +63,7 @@ Output  : none
 入口参数：bound：波特率
 返回  值：无
 **************************************************************************/
+
 void uart_init(u32 bound)
 {
   //GPIO端口设置
@@ -94,3 +96,4 @@ void uart_init(u32 bound)
   USART_Cmd(USART1, ENABLE);                    //使能串口1 
 
 }
+
