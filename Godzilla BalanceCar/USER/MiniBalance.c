@@ -55,7 +55,7 @@ float Speed_Ki;//
 float Turn_Kp;
 float Turn_Kd;
 
-int Speed_Bias;
+float Speed_Bias;
 float Turn_Bias;
 float Scaler;
 float Bias;
@@ -79,7 +79,7 @@ int main(void)
 	JTAG_Set(JTAG_SWD_DISABLE);     //关闭JTAG接口
 	JTAG_Set(SWD_ENABLE);           //打开SWD接口 可以利用主板的SWD接口调试
 	LED_Init(); 	//初始化与 LED 连接的硬件接口
-	Led_ShineForEvery2S();
+	//Led_ShineForEvery2S();
 	//KEY_Init();   
 	//按键初始化
 	//MiniBalance_Motor_Init();
@@ -102,7 +102,7 @@ int main(void)
 	button1_init();
 	button2_init();
 	//TIM3_Cap_Init(0XFFFF,72-1);	    //超声波初始化
-	//Led_ShineForEvery2S();
+	Led_ShineForEvery2S();
 	MiniBalance_EXTI_Init();	//MPU6050 5ms定时中断初始化，节省定时器资源，减少cpu负担
 	
 	//Led_ShineForEvery2S();

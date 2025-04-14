@@ -49,7 +49,7 @@ extern float Turn_Kd;
 
 extern float Scaler;
 extern float Bias;
-extern int Speed_Bias;
+extern float Speed_Bias;
 extern float Turn_Bias;
 extern float Turn_Bias_Small;
 extern int BlueTooth_Mode;
@@ -95,10 +95,11 @@ void EXTI15_10_IRQHandler(void)
 			Turn_Kp=0;
 			Turn_Kd=0;
 			
-			Turn_Bias=40;//右转则为负
+			Turn_Bias=42;//右转则为负
 			Speed_Bias=0;
 			
 			Scaler=1;
+			Turn_Bias_Small=0;
 			//Bias=4.6;
 			Distance+=ST_DISTANCE_ACCU;
 		}else{
@@ -185,8 +186,12 @@ void EXTI15_10_IRQHandler(void)
 				}
 				else
 				{
-					
-					Speed_Bias=0;
+					if(Flag_Mode==0){
+						
+						
+						Target_Speed=0;
+						Speed_Bias=0;
+						
 					Balance_Kp=980*0.6;//320
 					Balance_Kd=4*0.5;//2.5*0.6;
 
@@ -196,13 +201,16 @@ void EXTI15_10_IRQHandler(void)
 					Turn_Kp=0;//1;
 					Turn_Kd=0;//-60;//-70
 					Turn_Bias=0;//右转则为负
-					Target_Speed=0;
+					
 					//Turn_Bias=3*Target_Speed;
-					Bias=0;
+						Bias=0;
 					//Turn_Bias=8;
 					//Turn_Bias_Small=20;
 					Target_Turn=0;
 					Scaler=1;
+						Turn_Bias_Small=0;
+					}
+					
 					
 				}
 			}
@@ -210,9 +218,9 @@ void EXTI15_10_IRQHandler(void)
 			}
 		
 			
-			if(BlueTooth_Mode==11)
+			if(Flag_Mode==3&&BlueTooth_Mode==11)//5A
 			{
-				Target_Speed=10;
+				Target_Speed=1;
 			Target_Turn=0;
 			
 			Balance_Kp=980*0.6;
@@ -224,14 +232,15 @@ void EXTI15_10_IRQHandler(void)
 			Turn_Kp=0;
 			Turn_Kd=0;
 			
-			Turn_Bias=40;//右转则为负
-			Speed_Bias=0;
+			Turn_Bias=18;//右转则为负
+			Speed_Bias=30;
 			
 			Scaler=1;
+			Turn_Bias_Small=0;	
 			}
-			else if(BlueTooth_Mode==12)
+			else if(Flag_Mode==3&&BlueTooth_Mode==12)
 			{
-								Target_Speed=10;
+								Target_Speed=2;
 			Target_Turn=0;
 			
 			Balance_Kp=980*0.6;
@@ -243,15 +252,15 @@ void EXTI15_10_IRQHandler(void)
 			Turn_Kp=0;
 			Turn_Kd=0;
 			
-			Turn_Bias=40;//右转则为负
-			Speed_Bias=0;
+			Turn_Bias=20;//右转则为负
+			Speed_Bias=30;
 			
 			Scaler=1;
-				
+			Turn_Bias_Small=0;		
 			}
-			else if(BlueTooth_Mode==13)
+			if(Flag_Mode==3&&BlueTooth_Mode==13)
 			{
-					Target_Speed=10;
+					Target_Speed=4;
 			Target_Turn=0;
 			
 			Balance_Kp=980*0.6;
@@ -263,68 +272,93 @@ void EXTI15_10_IRQHandler(void)
 			Turn_Kp=0;
 			Turn_Kd=0;
 			
-			Turn_Bias=40;//右转则为负
+			Turn_Bias=20;//右转则为负
 			Speed_Bias=0;
 			
 			Scaler=1;
-				
+			Turn_Bias_Small=0;	
 			}
 			
-		else if(BlueTooth_Mode==21)
+		if(Flag_Mode==3&&BlueTooth_Mode==21)
 		{
-										Target_Speed=25;
-						//Target_Turn=1000;
+						Target_Speed=1;
+			Target_Turn=0;
 			
-							Balance_Kp=980*0.6;
-							Balance_Kd=4*0.58;
+			Balance_Kp=980*0.6;
+			Balance_Kd=4*0.58;
 
-							Speed_Kp=-203;
-							Speed_Ki=-203/200;
+			Speed_Kp=-203;
+			Speed_Ki=-203/200;
 
-							Turn_Kp=0;
-							Turn_Kd=0;
+			Turn_Kp=0;
+			Turn_Kd=0;
 			
-							Turn_Bias=0;//右转则为负
-							Speed_Bias=0;
-							Turn_Bias_Small=-350;
-							Scaler=1;
+			Turn_Bias=15;//右转则为负
+			Speed_Bias=30;
+			
+			Scaler=1;
+			Turn_Bias_Small=-30;	
 		}
-		else if(BlueTooth_Mode==22)
+		if(Flag_Mode==3&&BlueTooth_Mode==22)
 		{
-										Target_Speed=25;
-						//Target_Turn=1000;
+					Target_Speed=2;
+			Target_Turn=0;
 			
-							Balance_Kp=980*0.6;
-							Balance_Kd=4*0.58;
+			Balance_Kp=980*0.6;
+			Balance_Kd=4*0.58;
 
-							Speed_Kp=-203;
-							Speed_Ki=-203/200;
+			Speed_Kp=-203;
+			Speed_Ki=-203/200;
 
-							Turn_Kp=0;
-							Turn_Kd=0;
+			Turn_Kp=0;
+			Turn_Kd=0;
 			
-							Turn_Bias=0;//右转则为负
-							Speed_Bias=0;
-							Turn_Bias_Small=-350;
-							Scaler=1;
+			Turn_Bias=-30;//右转则为负
+			Speed_Bias=30;
+			
+			Scaler=1;
+			Turn_Bias_Small=0;	
 		}
-		else if (BlueTooth_Mode==23)
+		if (Flag_Mode==3&&BlueTooth_Mode==23)
 		{
-										Target_Speed=25;
-						//Target_Turn=1000;
+										Target_Speed=4;
+			Target_Turn=0;
 			
-							Balance_Kp=980*0.6;
-							Balance_Kd=4*0.58;
+			Balance_Kp=980*0.6;
+			Balance_Kd=4*0.58;
 
-							Speed_Kp=-203;
-							Speed_Ki=-203/200;
+			Speed_Kp=-203;
+			Speed_Ki=-203/200;
 
-							Turn_Kp=0;
-							Turn_Kd=0;
+			Turn_Kp=0;
+			Turn_Kd=0;
 			
+			Turn_Bias=20;//右转则为负
+			Speed_Bias=0;
+			
+			Scaler=1;
+			Turn_Bias_Small=-80;	
+		}
+		if(Flag_Mode==3&&BlueTooth_Mode==30)
+		{
+						Target_Speed=0;
+						Speed_Bias=0;
+						
+							Balance_Kp=980*0.6;//320
+							Balance_Kd=4*0.5;//2.5*0.6;
+
+							Speed_Kp=-203;//245;
+							Speed_Ki=-203/200;//245./200;
+
+							Turn_Kp=0;//1;
+							Turn_Kd=0;//-60;//-70
 							Turn_Bias=0;//右转则为负
-							Speed_Bias=0;
-							Turn_Bias_Small=-350;
+					
+					//Turn_Bias=3*Target_Speed;
+							Bias=0;
+					//Turn_Bias=8;
+					//Turn_Bias_Small=20;
+							Target_Turn=0;
 							Scaler=1;
 		}
 		//Flag_Target=!Flag_Target;

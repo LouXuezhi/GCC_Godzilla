@@ -79,7 +79,7 @@ void uart3_init(u32 bound)
 
 void uart3_init(u32 bound)
 {  	 
-	Led_ShineForEvery2S();
+	//Led_ShineForEvery2S();
 	  //GPIO端口设置
   GPIO_InitTypeDef GPIO_InitStructure;
 	USART_InitTypeDef USART_InitStructure;
@@ -138,10 +138,21 @@ void USART1_IRQHandler(void)
 		//static float Data;
   	uart_receive=USART_ReceiveData(USART1); 
 		Usart3_Receive=uart_receive;
-		if(uart_receive==0x59)  Flag_Sleep=!Flag_Sleep;  //低速挡（默认值）
+		if(uart_receive==0x59)
+		{
+			Flag_Sleep=!Flag_Sleep;  //低速挡（默认值）
+			Flag_Mode=0;
+		}			
 		
 	  if(uart_receive>0)  //默认使用
     {			
+		
+			if(uart_receive==0x57)
+		{
+			Flag_Mode=3;
+			BlueTooth_Mode=30;
+		}			
+			
 			if(uart_receive==0x5A)	    
 			{
 				//Flag_Mode=1;
@@ -149,48 +160,54 @@ void USART1_IRQHandler(void)
 				//Bias=2;
 				//Speed_Bias=100;
 				//Target_Speed=1;
+				Flag_Mode=3;
 				BlueTooth_Mode=11;
-				Led_ShineForEvery2S();
+				//Led_ShineForEvery2S();
 			}
-			else if(uart_receive==0x41)
+			if(uart_receive==0x41)
 			
 				//Flag_Mode=1;
 				//Bias=4;
 			//Speed_Bias=200;
-			Target_Speed=2;
+			//Target_Speed=2;
 			BlueTooth_Mode=12;
+			Flag_Mode=3;
 			}//前
-			else if(uart_receive==0x45)
+			if(uart_receive==0x45)
 			{
 				//Flag_Mode=1;
 				//Bias=6;
 				//Speed_Bias=300;
 				//Target_Speed=10;
 				BlueTooth_Mode=13;
+				Flag_Mode=3;
 			}
-			else if(uart_receive==0x42)	
+			if(uart_receive==0x42)	
 			{
 				//Flag_Mode=2;
 				//Bias=2;
 				//Speed_Bias=100;
 				//Target_Speed=1;
 				BlueTooth_Mode=21;
+				Flag_Mode=3;
 			}
-			else if(uart_receive==0x46)	    
+			if(uart_receive==0x46)	    
 			{
 				//Flag_Mode=2;
 				//Bias=4;
 				//Speed_Bias=200;
 				//Target_Speed=2;
 				BlueTooth_Mode=22;
+				Flag_Mode=3;
 			}
-			else if(uart_receive==0x48)
+			if(uart_receive==0x48)
 			{
 				//Flag_Mode=2;
 				//Bias=6;
 				//Speed_Bias=300;
 				//Target_Speed=3;
 				BlueTooth_Mode=23;
+				Flag_Mode=3;
 			}//刹车
 			USART_ClearITPendingBit(USART1, USART_IT_RXNE);	
   	}

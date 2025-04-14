@@ -18,7 +18,7 @@ extern float pitch,row,yaw;
 extern float gyrox,gyroy,gyroz;
 extern float accx,accy,accz;
 
-extern int Speed_Bias;
+extern float Speed_Bias;
 extern float Turn_Bias;
 //平衡环控制，输入参数为：1. 目标角度 Goal_Angle 2. 真实角度 Real_Angle 3. 真实角速度 Real_gyro_Y
 //
