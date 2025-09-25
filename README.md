@@ -1,15 +1,15 @@
 
-这里来自UoG,UESTC 的Godzilla队的仓库 
+这里来自UoG,UESTC 的**Godzilla**队的仓库 
 
 本仓库服务于2025年创格杯比赛 :rocket:
 
-队伍成员是 Xuezhi Lou, Zhiqi Qiu, Weipeng Zhang. 
+队伍成员是 **Xuezhi Lou, Zhiqi Qiu, Weipeng Zhang**. 
 
 > This repository is from the Godzilla team, whose members are from the Glasgow College (UoG) and the University of Electronic Science and Technology of China (UESTC).
 > It serves the 2025 Chuangge Cup Competition.
 > The team members are Xuezhi Lou, Zhiqi Qiu, and Weipeng Zhang.
 
-我们的作品是一个二轮平衡小车，可以实现自稳定，前进后退，拐弯画圈等基本功能，也可远程控制. 
+我们的作品是一个**二轮平衡小车**，可以实现自稳定，前进后退，拐弯画圈等基本功能，也可远程控制. 
 
 > Our work is a two-wheeled self-balancing cart, which can achieve basic functions such as self-stabilization, forward and backward movement, turning and circle-drawing, and can also be controlled remotely.
 
@@ -21,8 +21,8 @@
 
 > It mainly applies technologies such as PID control and Kalman filtering.
 
-这也是我们的第一个 嵌入式项目！ :beer: 
+这也是我们的**第一个** 嵌入式项目！ :beer: 
 
 > It is also our first embedded project！ :beer: 
 
-<img src="./文档资料/Logo/Logo_Pink.png" width="300" height="200" alt="LOGO">
+<img src="./文档资料/Logo/Logo_Pink.png" width="300" height="300" alt="LOGO">
