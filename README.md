@@ -1,10 +1,8 @@
 
-这里是UoG,UESTC 的Godzilla队的仓库
+这里来自UoG,UESTC 的Godzilla队的仓库
+本仓库服务于2025年创格杯比赛
 队伍成员是 Xuezhi Lou, Zhiqi Qiu, Weipeng Zhang.
 
-2025.3.9 1:15  am
-> 上传了第二次组会备忘录，请查收。
-
-
-2025.3.15 11:52 am
-> 上传了第三次组会备忘录，请查收。
+This repository is from the Godzilla team, whose members are from the Glasgow College (UoG) and the University of Electronic Science and Technology of China (UESTC).
+This repository serves the 2025 Chuangge Cup Competition.
+The team members are Xuezhi Lou, Zhiqi Qiu, and Weipeng Zhang.
